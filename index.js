@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client;
 const token = process.env.token;
-const owner = '567685022270750721';
+const owner = '430174837911060490';
 const roblox = require("noblox.js");
 
 let prefix = null;
@@ -31,18 +31,32 @@ const serverInfoModel = mongoose.model('serverinfo', serverInfoSchema);
 
 const memberProfileModel = mongoose.model('profile', memberProfileSchema);
 
+function change(id, type, amount){
+  var promise = new Promise((resolve, reject) => {
+    let fetchedData = memberProfileModel.findOne({ userid: id }, (err, data) => {
+      if(err) reject(err);
+      if(type == "add"){
+        fetchedData.updateOne({ amount: data.amount + amount }).then(() => resolve()).catch(err => reject(err));
+      }else{
+        fetchedData.updateOne({ amount: data.amount - amount }).then(() => resolve()).catch(err => reject(err));
+      }
+    })
+  })
+  return promise;
+}
+
 function login(cookie){
   var promise = new Promise((resolve, reject) => {
     if(cookie){
       let fetchedData = serverInfoModel.findOne({ identifier: "540" }, (err, data) => {
-        if(err) reject(err);
+        if(err) return reject(err);
         fetchedData.updateOne({ cookie: cookie }).then(() => {
           roblox.setCookie(cookie).then(() => resolve("Set the cookie succesfully!")).catch(err => { if(err) reject(err) });
         });
       })
     }else {
       serverInfoModel.findOne({ identifier: "540" }, (err, data) => {
-        if(err) reject(err);
+        if(err) return reject(err);
         roblox.setCookie(data.cookie).then(() => resolve("Set the cookie succesfully!")).catch(err => { if(err) reject(err) });
       })
     }
@@ -200,6 +214,28 @@ bot.on('message', message => {
         getIdFromUsername(args[1]).then(id => {
           payout(id, data.groupid, message.author.id, args[1]).then(msg => message.channel.send(msg)).catch(err => message.channel.send(`Error! Make sure you joined our group and that the group funds are higher then the withdrawl amount! https://www.roblox.com/groups/${data.groupid}/about`))
         }).catch(err => message.channel.send("Invalid username."));
+      }else if(message.content.toLowerCase().startsWith(`${data.prefix}add`)){
+        let args = message.content.split(" ");
+        let target = message.mentions.first();
+        if(!target){
+          return message.channel.send(`Specify a person to add to.`)
+        }
+        if(args[1]){
+          change(message.author.id, "add", parseInt(args[1], 10)).then(() => message.channel.send(`Added **${parseInt(args[1], 10)}** robux to `));
+        }else{
+          message.channel.send("Invalid syntax, no amount specified.");
+        }
+      }else if(message.content.toLowerCase().startsWith(`${data.prefix}remove`)){
+        let args = message.content.split(" ");
+        let target = message.mentions.first();
+        if(!target){
+          return message.channel.send(`Specify a person to add to.`)
+        }
+        if(args[1]){
+          change(message.author.id, "remove", parseInt(args[1], 10)).then(() => message.channel.send(`Removed **${parseInt(args[1], 10)}** robux to `));
+        }else{
+          message.channel.send("Invalid syntax, no amount specified.");
+        }
       }
     })
   }else{
