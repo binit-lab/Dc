@@ -192,10 +192,12 @@ bot.on('message', message => {
         message.channel.send("Stopped the giveaways.");
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}settime`)){
         let args = message.content.substring(data.prefix.length).split(" ");
-        dataCollected.updateOne({ timePerGiveaway: parseInt(args[1], 10) }).then(() => message.channel.send(`I have set the time to **${args[1]}** minutes`)).catch(err => message.channel.send("Error!"));
+        if(!args[1]) return message.channel.send("You need to tell me how many minutes to set the time to.");
+        if(isNan(args[1])) return message.channel.send("Thats not a valid number.");
+        dataCollected.updateOne({ timePerGiveaway: parseInt(args[1]) }).then(() => message.channel.send(`I have set the time to **${args[1]}** minutes`)).catch(err => message.channel.send("Error!"));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}setamount`)){
         let args = message.content.substring(data.prefix.length).split(" ");
-        dataCollected.updateOne({ amountPerGiveaway: parseInt(args[1], 10) }).then(() => message.channel.send(`I have set the amount of robux given to: **${args[1]}**`)).catch(err => console.log(err));
+        dataCollected.updateOne({ amountPerGiveaway: parseInt(args[1]) }).then(() => message.channel.send(`I have set the amount of robux given to: **${args[1]}**`)).catch(err => console.log(err));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}robux`)){
         let personToCheck;
         let target = message.mentions.users.first();
