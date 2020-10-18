@@ -194,10 +194,12 @@ bot.on('message', message => {
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}settime`)){
         let args = message.content.substring(data.prefix.length).split(" ");
         if(!args[1]) return message.channel.send("You need to tell me how many minutes to set the time to.");
-        if(isNan(args[1])) return message.channel.send("Thats not a valid number.");
+        if(isNaN(args[1])) return message.channel.send("Thats not a valid number.");
         dataCollected.updateOne({ timePerGiveaway: parseInt(args[1]) }).then(() => message.channel.send(`I have set the time to **${args[1]}** minutes`)).catch(err => message.channel.send("Error!"));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}setamount`)){
         let args = message.content.substring(data.prefix.length).split(" ");
+        if(!args[1]) return message.channel.send("You must tell me how much to set the robux given per giveaway");
+        if(isNaN(args[1])) return message.channel.send("You must give me an actual number.");
         dataCollected.updateOne({ amountPerGiveaway: parseInt(args[1]) }).then(() => message.channel.send(`I have set the amount of robux given to: **${args[1]}**`)).catch(err => console.log(err));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}robux`)){
         let personToCheck;
