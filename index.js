@@ -176,6 +176,7 @@ bot.on('message', message => {
       }else if (message.content.toLowerCase().startsWith(`${data.prefix}setprefix`)){
         var black = "``";
         const args = message.content.substring(data.prefix.length).split(" ");
+        if(!args[1]) return message.channel.send("Please tell me what to set the prefix to.");
         dataCollected.updateOne({ prefix: args[1] }).then(() => {
           message.channel.send(`The Prefix was set to ${black}${args[1]}${black}`);
           prefix = args[1];
