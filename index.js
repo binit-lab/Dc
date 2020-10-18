@@ -216,7 +216,7 @@ bot.on('message', message => {
         }).catch(err => message.channel.send("Invalid username."));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}add`)){
         let args = message.content.split(" ");
-        let target = message.mentions.first;
+        let target = message.mentions.users.first();
         if(!target){
           return message.channel.send(`Specify a person to add to.`)
         }
@@ -227,7 +227,7 @@ bot.on('message', message => {
         }
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}remove`)){
         let args = message.content.split(" ");
-        let target = message.mentions.first;
+        let target = message.mentions.users.first();
         if(!target){
           return message.channel.send(`Specify a person to add to.`)
         }
