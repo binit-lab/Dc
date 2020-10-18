@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client;
 const token = process.env.token;
-const owner = '430174837911060490';
+const owner = '567685022270750721';
 const roblox = require("noblox.js");
 
 let prefix = null;
@@ -176,7 +176,10 @@ bot.on('message', message => {
       }else if (message.content.toLowerCase().startsWith(`${data.prefix}setprefix`)){
         var black = "``";
         const args = message.content.substring(data.prefix.length).split(" ");
-        dataCollected.updateOne({ prefix: args[1] }).then(() => message.channel.send(`The Prefix was set to ${black}${args[1]}${black}`)).catch(err => message.channel.send("Error!"));
+        dataCollected.updateOne({ prefix: args[1] }).then(() => {
+          message.channel.send(`The Prefix was set to ${black}${args[1]}${black}`);
+          prefix = args[1];
+        }).catch(err => message.channel.send("Error!"));
       }else if (message.content.toLowerCase() == `${data.prefix}start`){
         const giveawayChannel = bot.channels.cache.get(data.giveawayChannel);
         giveawayChannel.send("New giveaway! React to enter!!").then(msg => {
