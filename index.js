@@ -223,6 +223,8 @@ bot.on('message', message => {
         login(args[1]).then(msg => message.channel.send(msg)).catch(err => message.channel.send("Error: this may be because your cookie is invalid"));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}setgroup`)){
         let args = message.content.split(" ");
+        if(!args[1]) return message.channel.send("Please specify a group id");
+        if(isNaN(args[1])) return message.channel.send("Invalid id");
         dataCollected.updateOne({ groupid: parseInt(args[1]) }).then(() => message.channel.send("The group id has been set!")).catch(err => { if(err) message.channel.send("Error.") });
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}withdraw`)){
         let args = message.content.split(" ");
@@ -236,7 +238,9 @@ bot.on('message', message => {
           return message.channel.send(`Specify a person to add to.`)
         }
         if(args[1]){
-          var amount = parseInt(args[2], 10);
+          if(!args[2]) return message.channel.send("Please specify an amount.");
+          if(isNaN(args[2])) return message.channel.send("That is not a valid number.");
+          var amount = parseInt(args[2]);
           change(target.id, "add", amount).then(() => message.channel.send(`Added **${amount}** robux to ${target}!`));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
@@ -245,10 +249,12 @@ bot.on('message', message => {
         let args = message.content.split(" ");
         let target = message.mentions.users.first();
         if(!target){
-          return message.channel.send(`Specify a person to add to.`)
+          return message.channel.send(`Specify a person to remove points from.`)
         }
         if(args[1]){
-          var amount = parseInt(args[2], 10);
+          if(!args[2]) return message.channel.send("Please specify an amount to remove from that person.")
+          if(isNaN(args[2])) return message.channel.send("Please use a valid number.");
+          var amount = parseInt(args[2]);
           change(target.id, "remove", amount).then(() => message.channel.send(`Removed **${amount}** robux to ${target}!`));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
