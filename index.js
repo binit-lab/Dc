@@ -197,12 +197,19 @@ bot.on('message', message => {
         let args = message.content.substring(data.prefix.length).split(" ");
         dataCollected.updateOne({ amountPerGiveaway: parseInt(args[1], 10) }).then(() => message.channel.send(`I have set the amount of robux given to: **${args[1]}**`)).catch(err => console.log(err));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}robux`)){
-        memberProfileModel.findOne({ userid: message.author.id }, (err, data1) => {
+        let personToCheck;
+        let target = message.mentions.users.first();
+        if(target){
+          personToCheck = target;
+        }else {
+          personToCheck = message.author;
+        }
+        memberProfileModel.findOne({ userid: personToCheck.id }, (err, data1) => {
           if(err) return message.channel.send("Error.");
           if(data1 == undefined){
-            memberProfileModel({ userid: message.author.id, amount: 0 }).save(() => message.channel.send("You have **0** robux claimable."));
+            memberProfileModel({ userid: message.author.id, amount: 0 }).save(() => message.channel.send(`${personToCheck} has **0** robux thats claimable.`));
           }else{
-            message.channel.send(`You have **${data1.amount}** robux claimable`);
+            message.channel.send(`${personToCheck} has **0** robux thats claimable.`);
           }
         })
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}setcookie`)){
@@ -225,7 +232,7 @@ bot.on('message', message => {
         }
         if(args[1]){
           var amount = parseInt(args[2], 10);
-          change(target.id, "add", amount).then(() => message.channel.send(`Added **${amount}** robux to `));
+          change(target.id, "add", amount).then(() => message.channel.send(`Added **${amount}** robux to ${target}!`));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
         }
@@ -237,7 +244,7 @@ bot.on('message', message => {
         }
         if(args[1]){
           var amount = parseInt(args[2], 10);
-          change(target.id, "remove", amount).then(() => message.channel.send(`Removed **${amount}** robux to `));
+          change(target.id, "remove", amount).then(() => message.channel.send(`Removed **${amount}** robux to ${target}!`));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
         }
@@ -257,12 +264,19 @@ bot.on('message', message => {
             payout(id, data.groupid, message.author.id, args[1]).then(msg => message.channel.send(msg)).catch(err => message.channel.send(`Error! Make sure you joined our group and that the group funds are higher then the withdrawl amount! https://www.roblox.com/groups/${data.groupid}/about`))
           }).catch(err => message.channel.send("Invalid username."));
         }else if(message.content.toLowerCase().startsWith(`${data.prefix}robux`)){
-          memberProfileModel.findOne({ userid: message.author.id }, (err, data1) => {
+          let personToCheck;
+          let target = message.mentions.users.first();
+          if(target){
+            personToCheck = target;
+          }else {
+            personToCheck = message.author;
+          }
+          memberProfileModel.findOne({ userid: personToCheck.id }, (err, data1) => {
             if(err) return message.channel.send("Error.");
             if(data1 == undefined){
-              memberProfileModel({ userid: message.author.id, amount: 0 }).save(() => message.channel.send("You have **0** robux claimable."));
+              memberProfileModel({ userid: message.author.id, amount: 0 }).save(() => message.channel.send(`${personToCheck} has **0** robux thats claimable.`));
             }else{
-              message.channel.send(`You have **${data1.amount}** robux claimable`);
+              message.channel.send(`${personToCheck} has **0** robux thats claimable.`);
             }
           })
         }
