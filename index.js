@@ -265,7 +265,7 @@ bot.on('message', message => {
           }).catch(err => message.channel.send("Invalid username."));
         }else if(message.content.toLowerCase().startsWith(`${data.prefix}robux`)){
           let personToCheck;
-          let target = message.mentions.users.first();
+          const target = message.mentions.users.first();
           if(target){
             personToCheck = target;
           }else {
@@ -276,7 +276,7 @@ bot.on('message', message => {
             if(data1 == undefined){
               memberProfileModel({ userid: message.author.id, amount: 0 }).save(() => message.channel.send(`${personToCheck} has **0** robux thats claimable.`));
             }else{
-              message.channel.send(`${personToCheck} has **0** robux thats claimable.`);
+              message.channel.send(`${personToCheck} has **${data1.amount}** robux thats claimable.`);
             }
           })
         }
