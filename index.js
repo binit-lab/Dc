@@ -209,7 +209,7 @@ bot.on('message', message => {
           if(data1 == undefined){
             memberProfileModel({ userid: message.author.id, amount: 0 }).save(() => message.channel.send(`${personToCheck} has **0** robux thats claimable.`));
           }else{
-            message.channel.send(`${personToCheck} has **0** robux thats claimable.`);
+            message.channel.send(`${personToCheck} has **${data1.amount}** robux thats claimable.`);
           }
         })
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}setcookie`)){
