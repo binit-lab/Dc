@@ -222,7 +222,7 @@ bot.on('message', message => {
         }
         if(args[1]){
           var amount = parseInt(args[2], 10);
-          change(target.id, "add", amount).then(() => message.channel.send(`Added **${parseInt(args[1], 10)}** robux to `));
+          change(target.id, "add", amount).then(() => message.channel.send(`Added **${amount}** robux to `));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
         }
@@ -234,7 +234,7 @@ bot.on('message', message => {
         }
         if(args[1]){
           var amount = parseInt(args[2], 10);
-          change(target.id, "remove", amount).then(() => message.channel.send(`Removed **${parseInt(args[1], 10)}** robux to `));
+          change(target.id, "remove", amount).then(() => message.channel.send(`Removed **${amount}** robux to `));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
         }
