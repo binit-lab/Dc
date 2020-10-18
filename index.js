@@ -221,7 +221,8 @@ bot.on('message', message => {
           return message.channel.send(`Specify a person to add to.`)
         }
         if(args[1]){
-          change(target.id, "add", parseInt(args[2], 10)).then(() => message.channel.send(`Added **${parseInt(args[1], 10)}** robux to `));
+          var amount = parseInt(args[2], 10);
+          change(target.id, "add", amount)then(() => message.channel.send(`Added **${parseInt(args[1], 10)}** robux to `));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
         }
@@ -232,7 +233,8 @@ bot.on('message', message => {
           return message.channel.send(`Specify a person to add to.`)
         }
         if(args[1]){
-          change(target.id, "remove", parseInt(args[2], 10)).then(() => message.channel.send(`Removed **${parseInt(args[1], 10)}** robux to `));
+          var amount = parseInt(args[2], 10);
+          change(target.id, "remove", amount).then(() => message.channel.send(`Removed **${parseInt(args[1], 10)}** robux to `));
         }else{
           message.channel.send("Invalid syntax, no amount specified.");
         }
