@@ -223,7 +223,7 @@ bot.on('message', message => {
         login(args[1]).then(msg => message.channel.send(msg)).catch(err => message.channel.send("Error: this may be because your cookie is invalid"));
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}setgroup`)){
         let args = message.content.split(" ");
-        dataCollected.updateOne({ groupid: parseInt(args[1], 10) }).then(() => message.channel.send("The group id has been set!")).catch(err => { if(err) message.channel.send("Error.") });
+        dataCollected.updateOne({ groupid: parseInt(args[1]) }).then(() => message.channel.send("The group id has been set!")).catch(err => { if(err) message.channel.send("Error.") });
       }else if(message.content.toLowerCase().startsWith(`${data.prefix}withdraw`)){
         let args = message.content.split(" ");
         getIdFromUsername(args[1]).then(id => {
