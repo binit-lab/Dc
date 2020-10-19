@@ -83,7 +83,9 @@ function payout(userid, groupid, discordid, username){
       if(data.amount == 0){
         return resolve("You don't have any claimable robux...");
       }
-      roblox.groupPayout({ group: groupid, member: userid, amount: data.amount }).then(() => resolve(`Payed out **${data.amount}** to **${username}**.`)).catch(err => reject(err));
+      roblox.groupPayout({ group: groupid, member: userid, amount: data.amount }).then(() => {
+        fetchedData.updateOne({ amount: 0 }).then(resolve(`Payed out **${data.amount}** to **${username}**.`)).catch(err => reject(err));
+      }).catch(err => reject(err));
     })
   });
   return promise;
