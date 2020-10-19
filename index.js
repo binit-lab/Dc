@@ -142,7 +142,7 @@ function run(data1){
         }
         getWinner(data, giveawayChannel).then(msg1 => {
           giveawayChannel.send(msg1);
-          giveawayChannel.send(`The giveaway for **${data.amountPerGiveaway}** has started. React with 🎉 to enter! (ends in **${data1.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
+          giveawayChannel.send(`The giveaway for **${data1.amountPerGiveaway}** has started. React with 🎉 to enter! (ends in **${data1.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
             msg.react("🎉");
             fetchedData.updateOne({ giveawayMessage: msg.id }).catch(err => console.log(err));
           });
@@ -183,7 +183,7 @@ bot.on('message', message => {
         }).catch(err => message.channel.send("Error!"));
       }else if (message.content.toLowerCase() == `${data.prefix}start`){
         const giveawayChannel = bot.channels.cache.get(data.giveawayChannel);
-        giveawayChannel.send("New giveaway! React to enter!!").then(msg => {
+        giveawayChannel.send(`The giveaway for **${data.amountPerGiveaway}** has started. React with 🎉 to enter! (ends in **${data.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
             msg.react("🎉");
             dataCollected.updateOne({ giveawayMessage: msg.id }).catch(err => console.log(err));
           });
