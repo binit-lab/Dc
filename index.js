@@ -114,10 +114,11 @@ function getWinner(data, giveawayChannel){
           let profileData = memberProfileModel.findOne({ userid: people1[0] }, (err, data1) => {
             if(err) return reject(err);
             if(data1 == undefined){
-              memberProfileModel({ userid: people1[0], amount: data.amountPerGiveaway }).save(() => resolve(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`));
+              memberProfileModel({ userid: people1[0], amount: data.amountPerGiveaway }).save(() => console.log(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`));
             }else{
-              profileData.updateOne({ amount: data1.amount + data.amountPerGiveaway }).then(() => resolve(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`))
+              profileData.updateOne({ amount: data1.amount + data.amountPerGiveaway }).then(() => console.log(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`))
             }
+            resolve("lol");
           })
         }else{
           personToEndOn.forEach(personToEndOnObj => personToEndOn.delete(personToEndOnObj));
