@@ -118,7 +118,7 @@ function getWinner(data, giveawayChannel){
             }else{
               profileData.updateOne({ amount: data1.amount + data.amountPerGiveaway }).then(() => console.log(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`))
             }
-            resolve("lol");
+            resolve("lolly");
           })
         }else{
           personToEndOn.forEach(personToEndOnObj => personToEndOn.delete(personToEndOnObj));
