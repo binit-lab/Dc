@@ -110,7 +110,8 @@ function getWinner(data, giveawayChannel){
     counter.add(0);
     for(var people1 of people){
       if(counter.length == personToEndOn[0]){
-        if(people1[0] !== bot.user.id){
+        if(people1[0] != bot.user.id){
+          console.log("bruh");
           let profileData = memberProfileModel.findOne({ userid: people1[0] }, (err, data1) => {
             if(err) return reject(err);
             if(data1 == undefined){
@@ -118,7 +119,6 @@ function getWinner(data, giveawayChannel){
             }else{
               profileData.updateOne({ amount: data1.amount + data.amountPerGiveaway }).then(() => console.log(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`))
             }
-            resolve("lolly");
           })
         }else{
           personToEndOn.forEach(personToEndOnObj => personToEndOn.delete(personToEndOnObj));
