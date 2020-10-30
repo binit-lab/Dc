@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client;
 const token = process.env.token;
-const owner = '430174837911060490';
+const owner = '567685022270750721';
 const roblox = require("noblox.js");
 
 let prefix = null;
@@ -91,44 +91,35 @@ function payout(userid, groupid, discordid, username){
   return promise;
 }
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+function getRandomPerson(people) {
+    let winner = people.random();
+    if(winner.id == bot.user.id){
+      return getRandomPerson(people);
+    }else{
+      return winner;
+    }
 }
 
 function getWinner(data, giveawayChannel){
   var promise = new Promise((resolve, reject) => {
     var oldMsg = giveawayChannel.messages.cache.get(data.giveawayMessage);
-    oldMsg.delete();
+    oldMsg.delete().catch(() => {});
     const oldMsgReactions = oldMsg.reactions.cache.get("🎉");
     const people = oldMsgReactions.users.cache;
     if(oldMsgReactions.count == 1){
       return resolve("A winner could not be decided.");
     }
-    var personToEndOn = new Set();
-    personToEndOn.add(getRandomInt(oldMsgReactions.count));
-    var counter = new Set();
-    counter.add(0);
-    for(var people1 of people){
-      if(counter.length == personToEndOn[0]){
-        if(people1[0] != bot.user.id){
-          console.log("bruh");
-          let profileData = memberProfileModel.findOne({ userid: people1[0] }, (err, data1) => {
-            if(err) return reject(err);
-            if(data1 == undefined){
-              memberProfileModel({ userid: people1[0], amount: data.amountPerGiveaway }).save(() => console.log(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`));
-            }else{
-              profileData.updateOne({ amount: data1.amount + data.amountPerGiveaway }).then(() => console.log(`Yay! <@${people1[0]}> won! You have won **${data.amountPerGiveaway}** to withdraw type **${data.prefix}robux** and follow the given instructions.`))
-            }
-          })
-        }else{
-          personToEndOn.forEach(personToEndOnObj => personToEndOn.delete(personToEndOnObj));
-          counter.forEach(counterObj => counter.delete(counterObj));
-          personToEndOn.add(getRandomInt(oldMsgReactions.count));
-        }
+    const winner = getRandomPerson(people);
+    const updateThis = memberProfileModel.findOne({ userid: winner.id }, (err, data1) => {
+      if(err) throw err;
+      if(data1 == undefined){
+        memberProfileModel({ userid: winner.id, amount: data.amountPerGiveaway }).save(() => resolve(`Congrats ${winner}! You have won ${data.amountPerGiveaway}R$! type **${data.prefix}withdraw <roblox-username>** to claim.`));
+      }else{
+        const sum = data1.amount + data.amountPerGiveaway;
+        updateThis.updateOne({ amount: sum }).then(() => resolve(`Congrats ${winner}! You have won ${data.amountPerGiveaway}R$! type **${data.prefix}withdraw <roblox-username>** to claim.`));
       }
-      counter.add(counter.length);
-    }
-  })
+    })
+  });
   return promise;
 }
 
@@ -145,7 +136,7 @@ function run(data1){
         }
         getWinner(data, giveawayChannel).then(msg1 => {
           giveawayChannel.send(msg1);
-          giveawayChannel.send(`The giveaway for **${data.amountPerGiveaway}** has started. React with 🎉 to enter! (ends in **${data1.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
+          giveawayChannel.send(`The giveaway for **${data.amountPerGiveaway}R$** has started. React with 🎉 to enter! (ends in **${data1.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
             msg.react("🎉");
             fetchedData.updateOne({ giveawayMessage: msg.id }).catch(err => console.log(err));
           });
@@ -186,7 +177,7 @@ bot.on('message', message => {
         }).catch(err => message.channel.send("Error!"));
       }else if (message.content.toLowerCase() == `${data.prefix}start`){
         const giveawayChannel = bot.channels.cache.get(data.giveawayChannel);
-        giveawayChannel.send(`The giveaway for **${data.amountPerGiveaway}** has started. React with 🎉 to enter! (ends in **${data.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
+        giveawayChannel.send(`The giveaway for **${data.amountPerGiveaway}R$** has started. React with 🎉 to enter! (ends in **${data.timePerGiveaway}** minutes!) ||@here||`).then(msg => {
             msg.react("🎉");
             dataCollected.updateOne({ giveawayMessage: msg.id }).catch(err => console.log(err));
           });
@@ -299,4 +290,4 @@ bot.on('message', message => {
   }
 })
 
-//bot.login(token);
+bot.login(token);
