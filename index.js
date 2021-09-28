@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client;
-const token = 'NzU5MDQwMzc2MzY2NDMyMjc3.X23tcA.xHM3yYns6NhF8Pj91IQV9hqLX4s';
+const token = 'process.env.Token';
 const owner = '567685022270750721';
 const roblox = require("noblox.js");
 
